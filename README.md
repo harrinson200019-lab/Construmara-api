@@ -4,11 +4,11 @@
 
 Construmara API es un servicio web REST desarrollado para apoyar la gestión de una empresa dedicada a actividades de construcción y remodelación.
 
-El sistema permite administrar información relacionada con clientes, proyectos, cotizaciones y materiales mediante servicios web que utilizan el formato JSON para el intercambio de datos.
+La API permite administrar información de clientes, proyectos, cotizaciones y materiales mediante solicitudes HTTP y respuestas en formato JSON. Los datos se almacenan en una base de datos relacional MySQL.
 
 ## 2. Objetivo
 
-Desarrollar una API REST que facilite la gestión de la información de Construmara y permita la comunicación entre diferentes aplicaciones y una base de datos relacional.
+Desarrollar una API REST que facilite la gestión de la información de Construmara, permita realizar operaciones CRUD (crear, consultar, actualizar y eliminar) y establezca la comunicación entre las aplicaciones y la base de datos.
 
 ## 3. Tecnologías utilizadas
 
@@ -16,96 +16,262 @@ Desarrollar una API REST que facilite la gestión de la información de Construm
 - **Express.js:** framework para desarrollar los servicios web.
 - **MySQL:** sistema de gestión de bases de datos.
 - **mysql2:** controlador para conectar Node.js con MySQL.
-- **dotenv:** gestión de variables de entorno.
+- **dotenv:** administración de variables de entorno.
 - **CORS:** configuración del acceso entre diferentes orígenes.
 - **Postman:** herramienta para probar los servicios REST.
-- **Git y GitHub:** control de versiones y alojamiento del código fuente.
+- **Git:** sistema de control de versiones.
+- **GitHub:** plataforma para alojar y compartir el código fuente.
 
 ## 4. Módulos del sistema
 
-La API está organizada en cuatro módulos principales:
+La API cuenta con cuatro módulos principales:
 
-- **Clientes:** permite registrar, consultar, actualizar y eliminar clientes.
-- **Proyectos:** permite gestionar proyectos de construcción y remodelación.
-- **Cotizaciones:** permite administrar cotizaciones asociadas a los proyectos.
-- **Materiales:** permite gestionar materiales, cantidades y precios unitarios.
+- **Clientes:** registro, consulta, actualización y eliminación de clientes.
+- **Proyectos:** administración de proyectos de construcción y remodelación asociados a clientes.
+- **Cotizaciones:** gestión de cotizaciones relacionadas con los proyectos.
+- **Materiales:** administración de materiales, cantidades, unidades y precios unitarios.
 
-## 5. Requisitos para la instalación
+## 5. Requisitos
 
 Para ejecutar el proyecto se requiere:
 
 - Node.js y npm.
-- MySQL, por ejemplo, mediante XAMPP.
+- MySQL. Se puede utilizar XAMPP para administrar el servicio de base de datos.
 - Visual Studio Code u otro editor de código.
-- Postman para realizar las pruebas de los servicios.
+- Postman para probar los endpoints.
+- Git, si se desea clonar y administrar el repositorio.
 
 ## 6. Instalación y configuración
 
-1. Clonar el repositorio de GitHub.
-2. Abrir la carpeta del proyecto en Visual Studio Code.
-3. Instalar las dependencias con el comando:
+### 6.1. Obtener el proyecto
 
-   `npm install`
+Clonar el repositorio:
 
-4. Crear la base de datos `construmara_db` en MySQL y configurar las tablas requeridas.
-5. Crear un archivo `.env` en la carpeta principal y configurar las variables de conexión a la base de datos.
+```bash
+git clone https://github.com/harrinson200019-lab/Construmara-api.git
+```
 
-Ejemplo de configuración:
+Ingresar a la carpeta:
 
-    PORT=3000
-    DB_HOST=localhost
-    DB_USER=root
-    DB_PASSWORD=
-    DB_NAME=construmara_db
-    DB_PORT=3306
+```bash
+cd Construmara-api
+```
 
-**Nota:** la contraseña debe corresponder a la configuración local de MySQL. No se deben publicar credenciales reales en GitHub.
+### 6.2. Instalar dependencias
+
+Ejecutar:
+
+```bash
+npm install
+```
+
+### 6.3. Crear la base de datos
+
+1. Iniciar MySQL desde XAMPP.
+2. Abrir phpMyAdmin en `http://localhost/phpmyadmin`.
+3. Importar el archivo `construmara_db.sql`, incluido en el proyecto.
+4. Verificar que se haya creado la base de datos `construmara_db` con las tablas `clientes`, `proyectos`, `cotizaciones` y `materiales`.
+
+El archivo SQL contiene la estructura de la base de datos y sus relaciones principales.
+
+### 6.4. Configurar las variables de entorno
+
+Crear un archivo llamado `.env` en la carpeta principal del proyecto con la configuración correspondiente al entorno local:
+
+```env
+PORT=3000
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=
+DB_NAME=construmara_db
+DB_PORT=3306
+```
+
+**Importante:** ajustar el usuario, la contraseña y el puerto según la instalación local de MySQL. No publicar contraseñas reales ni el archivo `.env` en GitHub.
+
+El archivo `.env.example` sirve como referencia para configurar las variables necesarias.
 
 ## 7. Ejecución del proyecto
 
-Para iniciar el servidor en modo de desarrollo, ejecutar:
+Para iniciar el servidor en modo de desarrollo:
 
-    npm run dev
+```bash
+npm run dev
+```
+
+También se puede iniciar con:
+
+```bash
+npm start
+```
 
 La API estará disponible localmente en:
 
-http://localhost:3000
+`http://localhost:3000`
 
-Para comprobar el funcionamiento general, se puede consultar:
+### Endpoints de verificación
 
-- `GET /`
-- `GET /api/health`
+| Método | Endpoint | Descripción |
+|---|---|---|
+| GET | `/` | Verificar el mensaje de bienvenida de la API |
+| GET | `/api/health` | Consultar el estado del servicio |
 
 ## 8. Endpoints de la API REST
 
+La dirección base para las pruebas locales es:
+
+`http://localhost:3000`
+
+### 8.1. Clientes
+
 | Método HTTP | Endpoint | Descripción |
 |---|---|---|
-| GET | `/api/clientes` | Consultar clientes |
-| GET | `/api/clientes/:id` | Consultar un cliente por ID |
+| GET | `/api/clientes` | Consultar todos los clientes |
+| GET | `/api/clientes/:id` | Consultar un cliente por identificador |
 | POST | `/api/clientes` | Registrar un cliente |
 | PUT | `/api/clientes/:id` | Actualizar un cliente |
 | DELETE | `/api/clientes/:id` | Eliminar un cliente |
-| GET | `/api/proyectos` | Consultar proyectos |
+
+Ejemplo de cuerpo JSON para registrar un cliente:
+
+```json
+{
+  "nombre": "Juan Pérez",
+  "documento": "123456789",
+  "telefono": "3001234567",
+  "correo": "juan@example.com",
+  "direccion": "Corinto, Cauca"
+}
+```
+
+### 8.2. Proyectos
+
+| Método HTTP | Endpoint | Descripción |
+|---|---|---|
+| GET | `/api/proyectos` | Consultar los proyectos |
+| GET | `/api/proyectos/:id` | Consultar un proyecto por identificador |
 | POST | `/api/proyectos` | Registrar un proyecto |
-| GET | `/api/cotizaciones` | Consultar cotizaciones |
+| PUT | `/api/proyectos/:id` | Actualizar un proyecto |
+| DELETE | `/api/proyectos/:id` | Eliminar un proyecto |
+
+Los proyectos se relacionan con un cliente mediante `id_cliente`.
+
+Ejemplo de cuerpo JSON:
+
+```json
+{
+  "id_cliente": 1,
+  "nombre": "Remodelación de vivienda",
+  "tipo_obra": "Remodelación",
+  "descripcion": "Adecuación de espacios interiores",
+  "presupuesto": 5000000,
+  "estado": "Pendiente",
+  "fecha_inicio": "2026-10-20",
+  "fecha_fin": "2026-11-20"
+}
+```
+
+El cliente con identificador `1` debe existir previamente en la base de datos. Las fechas son ejemplos y pueden modificarse para las pruebas.
+
+### 8.3. Cotizaciones
+
+| Método HTTP | Endpoint | Descripción |
+|---|---|---|
+| GET | `/api/cotizaciones` | Consultar las cotizaciones |
+| GET | `/api/cotizaciones/:id` | Consultar una cotización por identificador |
 | POST | `/api/cotizaciones` | Registrar una cotización |
-| GET | `/api/materiales` | Consultar materiales |
+| PUT | `/api/cotizaciones/:id` | Actualizar una cotización |
+| DELETE | `/api/cotizaciones/:id` | Eliminar una cotización |
+
+Las cotizaciones se relacionan con un proyecto mediante `id_proyecto`.
+
+Ejemplo de cuerpo JSON:
+
+```json
+{
+  "id_proyecto": 1,
+  "fecha": "2026-10-16",
+  "descripcion": "Cotización de materiales y mano de obra",
+  "total": 2500000,
+  "estado": "Borrador"
+}
+```
+
+El proyecto con identificador `1` debe existir previamente. El valor de `estado` debe corresponder con los valores permitidos por la base de datos: `Borrador`, `Enviada`, `Aprobada` o `Rechazada`.
+
+### 8.4. Materiales
+
+| Método HTTP | Endpoint | Descripción |
+|---|---|---|
+| GET | `/api/materiales` | Consultar los materiales |
+| GET | `/api/materiales/:id` | Consultar un material por identificador |
 | POST | `/api/materiales` | Registrar un material |
+| PUT | `/api/materiales/:id` | Actualizar un material |
+| DELETE | `/api/materiales/:id` | Eliminar un material |
 
-Los módulos de proyectos, cotizaciones y materiales también cuentan con operaciones de actualización y eliminación. Los endpoints individuales utilizan el identificador correspondiente.
+Ejemplo de cuerpo JSON:
 
-## 9. Pruebas
+```json
+{
+  "nombre": "Cemento gris",
+  "descripcion": "Bulto de cemento para obras de construcción",
+  "unidad": "bulto",
+  "cantidad": 50,
+  "precio_unitario": 38000
+}
+```
 
-Los servicios se pueden probar mediante Postman, utilizando los métodos HTTP correspondientes y enviando los datos en formato JSON cuando sea necesario.
+**Nota:** los endpoints individuales utilizan el identificador del registro. Las operaciones de eliminación pueden estar restringidas cuando existen registros relacionados.
 
-Se recomienda verificar las respuestas del servidor, los códigos de estado HTTP y los cambios realizados en la base de datos.
+## 9. Pruebas con Postman
+
+El proyecto incluye la colección exportada:
+
+`Construmara-API.postman_collection.json`
+
+Para utilizarla:
+
+1. Abrir Postman.
+2. Seleccionar la opción para importar una colección.
+3. Elegir el archivo `Construmara-API.postman_collection.json`.
+4. Iniciar el servidor de Construmara API.
+5. Ejecutar las solicitudes de los módulos Clientes, Proyectos, Cotizaciones y Materiales.
+
+Para las solicitudes POST y PUT, seleccionar el tipo de contenido JSON (`application/json`) y enviar un cuerpo válido cuando corresponda.
+
+Se recomienda verificar las respuestas HTTP, los datos devueltos por el servidor y los cambios en la base de datos. Para probar las relaciones, registrar primero un cliente, después un proyecto y finalmente una cotización asociada al proyecto.
 
 ## 10. Control de versiones
 
-El código fuente se administra mediante Git y se encuentra alojado en GitHub.
+El proyecto utiliza Git para registrar los cambios del código fuente y GitHub para alojar el repositorio remoto.
 
-**Repositorio:** https://github.com/harrinson200019-lab/Construmara-api
+**Repositorio oficial:**
 
-## 11. Conclusión
+https://github.com/harrinson200019-lab/Construmara-api
 
-El desarrollo de Construmara API permite aplicar conocimientos sobre servicios web REST, programación con Node.js y Express, conexión con bases de datos MySQL y pruebas con Postman. Además, el uso de Git y GitHub facilita el control de versiones y la organización del código fuente del proyecto.
+## 11. Estructura principal del proyecto
+
+```text
+Construmara-api/
+├── src/
+│   ├── config/
+│   │   └── db.js
+│   ├── routes/
+│   │   ├── clientes.js
+│   │   ├── proyectos.js
+│   │   ├── cotizaciones.js
+│   │   └── materiales.js
+│   ├── probar-db.js
+│   └── server.js
+├── .env.example
+├── .gitignore
+├── Construmara-API.postman_collection.json
+├── construmara_db.sql
+├── package.json
+├── package-lock.json
+└── README.md
+```
+
+## 12. Conclusión
+
+Construmara API permite aplicar conocimientos de desarrollo de servicios web REST, programación con Node.js y Express, conexión con MySQL y pruebas mediante Postman. La documentación de los endpoints y el uso de Git y GitHub facilitan el mantenimiento, la trazabilidad de los cambios y la consulta del código fuente del proyecto.
