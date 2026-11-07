@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000;
 // Configuración de la API.
 app.use(cors());
 app.use(express.json());
-
+app.use(express.static("public"));
 // Importar rutas.
 const clientesRoutes = require("./routes/clientes");
 const proyectosRoutes = require("./routes/proyectos");
