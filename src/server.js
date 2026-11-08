@@ -38,7 +38,7 @@ app.use("/api/proyectos", proyectosRoutes);
 app.use("/api/cotizaciones", cotizacionesRoutes);
 app.use("/api/materiales", materialesRoutes);
 // Iniciar servidor.
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
     console.log(
         `Construmara API ejecutándose en http://localhost:${PORT}`
     );
