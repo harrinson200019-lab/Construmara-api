@@ -6,6 +6,8 @@
 
 const API_URL = "/api";
 
+console.log("API utilizada:", window.location.origin + API_URL);
+
 // ========================================
 // INICIAR APLICACIÓN
 // ========================================
@@ -86,7 +88,7 @@ if (sectionId === "materiales") {
     cargarProyectos();
     cargarCotizaciones();
     cargarMateriales();
-    
+
     console.log("Construmara: aplicación iniciada correctamente.");
 });
 
